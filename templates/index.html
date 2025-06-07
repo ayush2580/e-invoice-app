@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice Generator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <h1>Invoice Generator</h1>
+        <div class="top-controls">
+            <a href="/transactions">Transactions</a>
+            <a href="/inventory">Inventory</a>
+            <span class="toggle" onclick="toggleDarkMode()">Light/Dark</span>
+        </div>
+    </div>
+    <form method="POST" action="/generate">
+        <input type="text" name="name" placeholder="Customer Name" required>
+        <input type="text" name="phone" placeholder="Mobile Number" required>
+        <label>Payment Mode:
+            <select name="payment_mode">
+                <option>Cash</option>
+                <option>Online</option>
+            </select>
+        </label>
+        <div class="product-list">
+            {% for product in inventory %}
+            <div class="product-item">
+                <input type="checkbox" name="check_{{ product.code }}">
+                {{ product.name }} (Stock: {{ product.stock }})
+                <input type="number" name="quantity_{{ product.code }}" placeholder="Quantity" min="1">
+                <input type="number" step="0.01" name="price_{{ product.code }}" value="{{ product.price }}" placeholder="Price per unit">
+            </div>
+            {% endfor %}
+        </div>
+        <button type="submit">Generate Invoice</button>
+    </form>
+    <script src="/static/script.js"></script>
+</body>
+</html>
